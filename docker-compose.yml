@@ -1,0 +1,66 @@
+services:
+  server:
+    build:
+      # บอกตำแหน่งของฝั่ง server แลพ docker ไฟล์ข้างในนั้น
+      context: ./server
+      dockerfile: Dockerfile.server
+    ports:
+      - "5003:5000" #ซ้าย pc localhost ในเครื่อง ขวาคือ server docker
+    volumes:
+      - "./server:/app"
+      # เข้าถึงตัว node module ได้
+      - "/app/node_modules"
+      #ใส่ไม่ใส่ก็ได้
+    command: nodemon --legacy-watch index.js
+    restart:
+      always
+      #postgres ทำทั้งหมดให้รู้จักกัน โดยไม่ต้องระบุหมายเลข IP
+      #postgres:// คือ protocol
+      #username:password หลัง @ location db port:5432 หลัง / name db
+    environment:
+    #DATABASE_URL = postgres://user:pass@server:port/databse name
+    #เรียกว่า connection string
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/app_db
+      - HOST=db
+      - USER=postgres
+      - PASSWORD=postgres
+      - DB=app_db
+      - DB_PORT=5432
+      - SERVER_PORT=5000
+      # - DIALECT=postgres
+    depends_on:
+      - db
+
+  client:
+    build:
+      # บอกตำแหน่งของฝั่ง server แลพ docker ไฟล์ข้างในนั้น
+      context: ./client
+      dockerfile: Dockerfile.client
+    ports:
+      - "5173:5173"
+    volumes:
+      - "./client:/app"
+      # เข้าถึงตัว node module ได้
+      - "/app/node_modules"
+      #postgres ทำทั้งหมดให้รู้จักกัน โดยไม่ต้องระบุหมายเลข IP
+      #username:password หลัง @ location db port:5432 หลัง / name db
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    # รอ server เสร็จก่อน
+    depends_on:
+      - server
+
+  # database
+  db:
+    image: postgres:16
+    restart: always
+    ports:
+      - "15434:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=app_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:

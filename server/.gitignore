@@ -1,0 +1,30 @@
+node_modules/
+docker_test_db/
+*/.env
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+.env
+
+# React
+build/
+dist/
+.parcel-cache/
+
+# Docker
+# Exclude Docker volumes and build context specific files
+# Ensure .env is excluded from images if sensitive
+!docker-compose.yml
+!Dockerfile*
+!docker-entrypoint.sh # if used
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# IDE and Editor Files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspacenode_modules/ 
