@@ -1,24 +1,29 @@
-import {Datatypes} from "sequelize"; // การสลายโครงสร้าง 
-import User from "./user.model"; // สืบทอดจากคลาสแม่
- 
-const Judge = User({
+// models/judge.model.js
+import { DataTypes } from "sequelize";
+import User from "./user.model.js";
+import sequelize from "../config/db.js"; // import instance จริง
 
-scopes:{
-        defaultScope:{
-            where:{
-                type:"teacher",
-            },
-        },
+const Judge = User.init(
+  {
+    expertise: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
+  },
+  {
+    sequelize,          // ต้องใส่ Sequelize instance
+    modelName: "Judge", // ชื่อโมเดล
+    defaultScope: {     // scopes ต้องอยู่ใน options
+      where: {
+        type: "judge",
+      },
     },
-    
-    {
-        hook: {
-        beforeCreate:(teacher) => {
-            teacher.type = "teacher";
-        },
+    hooks: {            // hooks ต้องอยู่ใน object ชื่อ hooks
+      beforeCreate: (judge) => {
+        judge.type = "judge";
+      },
+    },
+  }
+);
 
-        }
-});
-
-export default Judge
+export default Judge;

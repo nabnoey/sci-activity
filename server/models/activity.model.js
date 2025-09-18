@@ -12,7 +12,6 @@ const Activity = sequelize.define(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      trim: true
     },
     description: {
       type: DataTypes.STRING,
@@ -62,18 +61,24 @@ const Activity = sequelize.define(
       validate: { isEmail: { msg: "Email is invalid" } }
     },
     status: {    
-      type: DataTypes.ENUM("draft","open","closed","in_progress","completeds"),   
+      type: DataTypes.ENUM("draft","open","closed","in_progress","completed"), // แก้ typo
       defaultValue: "draft",
     }
   },
   {
     tableName: "activities",
-    timestamps: false
+    timestamps: false,
+    hooks: {
+      beforeValidate: (activity) => {
+        if (activity.name) activity.name = activity.name.trim();
+      }
+    }
   }
 );
 
-Activity.sync({ force: true })
-  .then(() => console.log("Table created or already exists"))
+// sync table
+Activity.sync({ force: false })
+  .then(() => console.log("Table 'activities' created"))
   .catch((error) => console.log("Error creating table", error));
 
 export default Activity;

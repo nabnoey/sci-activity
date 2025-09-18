@@ -14,4 +14,4 @@ COPY . .
 # localhost server post 3000
 EXPOSE 5000
 #npm start
-CMD [ "nodemon", "index.js" ] -
+CMD [ "nodemon", "index.js" ] 

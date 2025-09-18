@@ -1,24 +1,18 @@
-import {Datatypes} from "sequelize"; // การสลายโครงสร้าง 
-import User from "./user.model"; // สืบทอดจากคลาสแม่
- 
-const Admin = User({
+import User from "./user.model.js";
+import { DataTypes } from "sequelize"; // <-- this is the missing piece
+import sequelize from "../config/db.js"; // import instance
 
-scopes:{
-        defaultScope:{
-            where:{
-                type:"teacher",
-            },
-        },
+const Admin = User.init(
+  {
+    department: { type: DataTypes.STRING, allowNull: false },
+  },
+  {
+    sequelize, // ✅ ต้องใส่ instance ของ Sequelize
+    modelName: "Admin",
+    hooks: {
+      beforeCreate: (admin) => { admin.type = "admin"; },
     },
-    },
-    
-    {
-        hook: {
-        beforeCreate:(teacher) => {
-            teacher.type = "teacher";
-        },
+  }
+);
 
-        }
-});
-
-export default Admin
+export default Admin;

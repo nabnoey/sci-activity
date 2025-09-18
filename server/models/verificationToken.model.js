@@ -1,32 +1,34 @@
-import {DataTypes} from "sequelize"
-import sequelize from  "./db.js";
+import { DataTypes, Model } from "sequelize";
+import sequelize from "../config/db.js";
 
-const VeriticationToken = sequelize.define("veritificationToken", {
-id:{
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    primatyKey: true
-},
-token:{
-    type: DataTypes.STRING,
-    allowNull:false,
-    unique:true
+class VerificationToken extends Model {}
 
-},
-
-userId:{
-    type:DataTypes.INTEGER,
-    allowNull: false,
-    reference:{
-        model: "user",
-        key: "id"
+VerificationToken.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true, // ✅ กำหนด primary key
+      autoIncrement: true,
     },
-},
+    token: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    expiredAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+  },
+  {
+    sequelize,
+    modelName: "VerificationToken",
+    tableName: "verificationTokens",
+    timestamps: true,
+  }
+);
 
-expiresAt:{
-    type: DataTypes.STRING,
-    allowNull: false
-},
-});
-
-export default VeriticationToken
+export default VerificationToken;

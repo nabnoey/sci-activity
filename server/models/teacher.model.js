@@ -1,35 +1,24 @@
-import {Datatypes} from "sequelize"; // การสลายโครงสร้าง 
-import User from "./user.model"; // สืบทอดจากคลาสแม่
+import User from "./user.model.js";
+import { DataTypes } from "sequelize"; // <-- this is the missing piece
+import sequelize from "../config/db.js"; // import instance
 
 const Teacher = User.init({
     school:{
-        type: Datatypes.STRING,
+        type:DataTypes.STRING,
         allowNull:false
     },
-
     phone:{
-        type:Datatypes.STRING,
-        allowNull:false
-    }
-},{
-    scopes:{
-        defaultScope:{
-            where:{
-                type:"teacher",
-            },
-        },
+        type:DataTypes.STRING,
+        allowNull:false,
     },
-    },
+}, {
+    sequelize, // ✅ ต้องใส่ instance ของ Sequelize
+    modelName: "Teacher",
     
-    {
-        hook: {
-        beforeCreate:(teacher) => {
-            teacher.type = "teacher";
-        },
-
-        }
-}); // เฉพาะ sequelize เท่านั้น ถ้าเป็น class ปกติต้องใช้ extend เท่านั้น
-
-
+    hooks: {
+      beforeCreate: (teacher) => { teacher.type = "teacher"; },
+    },
+  }
+);
 
 export default Teacher;

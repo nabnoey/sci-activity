@@ -7,12 +7,26 @@ import authRouter from "./routers/auth.router.js";
 
 dotenv.config();
 
+const env = process.env.NODE_ENV || "development";
 const PORT = process.env.PORT || 5003;
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const initDatabase = async () => {
+  try {
+    await db.sequelize.authenticate();
+    console.log("Connection has been established successfully.");
+    if(NODE_ENV === "development"){
+      await db.sequelize.sync({ aiter: true }); // สร้างตารางใหม่ทุกครั้งที่เริ่มเซิร์ฟเวอร์
+      console.log("database Synced successfully.");
+    }
+  }catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
+}
 
 import db from "./models/index.js";
 const Role = db.Role;
