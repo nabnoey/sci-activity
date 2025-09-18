@@ -5,9 +5,10 @@ import cors from "cors";
 import activityRouter from "./routers/activity.router.js"
 import authRouter from "./routers/auth.router.js";
 
-dotenv.config();
 
-const env = process.env.NODE_ENV || "development";
+
+dotenv.config();
+const NODE_ENV = process.env.NODE_ENV || "development";
 const PORT = process.env.PORT || 5003;
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
@@ -20,7 +21,7 @@ const initDatabase = async () => {
     await db.sequelize.authenticate();
     console.log("Connection has been established successfully.");
     if(NODE_ENV === "development"){
-      await db.sequelize.sync({ alter: true }); // สร้างตารางใหม่ทุกครั้งที่เริ่มเซิร์ฟเวอร์
+      await db.sequelize.sync({ force: true }); // สร้างตารางใหม่ทุกครั้งที่เริ่มเซิร์ฟเวอร์
       console.log("database Synced successfully.");
     }
   }catch (error) {
