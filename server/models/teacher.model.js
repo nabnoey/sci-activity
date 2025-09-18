@@ -1,6 +1,6 @@
 import User from "./user.model.js";
 import { DataTypes } from "sequelize"; // <-- this is the missing piece
-import sequelize from "../config/db.js"; // import instance
+
 
 const Teacher = User.init({
     school:{
@@ -12,7 +12,7 @@ const Teacher = User.init({
         allowNull:false,
     },
 }, {
-    sequelize, // ✅ ต้องใส่ instance ของ Sequelize
+   
     modelName: "Teacher",
     
     hooks: {

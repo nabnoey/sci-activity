@@ -20,13 +20,15 @@ const initDatabase = async () => {
     await db.sequelize.authenticate();
     console.log("Connection has been established successfully.");
     if(NODE_ENV === "development"){
-      await db.sequelize.sync({ aiter: true }); // สร้างตารางใหม่ทุกครั้งที่เริ่มเซิร์ฟเวอร์
+      await db.sequelize.sync({ alter: true }); // สร้างตารางใหม่ทุกครั้งที่เริ่มเซิร์ฟเวอร์
       console.log("database Synced successfully.");
     }
   }catch (error) {
     console.error("Unable to connect to the database:", error);
   }
 }
+
+initDatabase();
 
 import db from "./models/index.js";
 const Role = db.Role;

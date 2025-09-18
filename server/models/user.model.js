@@ -34,6 +34,16 @@ const User = sequelize.define("user", {
     type:DataTypes.STRING,
     allowNull:false
   },
+  //teacher ต้องมี school + phone
+   school:{
+          type:DataTypes.STRING,
+          allowNull:true
+      },
+      phone:{
+          type:DataTypes.STRING,
+          allowNull:true,
+      },
+
 
   isVerified:{
     type:DataTypes.BOOLEAN,

@@ -1,7 +1,6 @@
 // models/judge.model.js
 import { DataTypes } from "sequelize";
 import User from "./user.model.js";
-import sequelize from "../config/db.js"; // import instance จริง
 
 const Judge = User.init(
   {
@@ -11,7 +10,7 @@ const Judge = User.init(
     },
   },
   {
-    sequelize,          // ต้องใส่ Sequelize instance
+    
     modelName: "Judge", // ชื่อโมเดล
     defaultScope: {     // scopes ต้องอยู่ใน options
       where: {

@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../config/db.js";
+// import sequelize from "../config/db.js";
 
 class VerificationToken extends Model {}
 
@@ -23,12 +23,12 @@ VerificationToken.init(
       allowNull: false,
     },
   },
-  {
-    sequelize,
-    modelName: "VerificationToken",
-    tableName: "verificationTokens",
-    timestamps: true,
-  }
+  // {
+  //   sequelize,
+  //   modelName: "VerificationToken",
+  //   tableName: "verificationTokens",
+  //   timestamps: true,
+  // }
 );
 
 export default VerificationToken;
