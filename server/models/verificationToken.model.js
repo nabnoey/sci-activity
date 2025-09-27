@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "./db.js";
 
-const VerificationToken = sequelize.define("verificationTokens", {
+const VerificationToken = sequelize.define("verificationToken", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

@@ -1,11 +1,6 @@
-import sequelize from "./db.js";
-//import (นำเข้า) สิ่งที่ชื่อว่า DataTypes จากไลบรารีที่ชื่อว่า "sequelize"
 import { DataTypes } from "sequelize";
-import bcrypt from "bcryptjs";
-
-// สร้างโมเดล (Model) ที่ชื่อว่า User โดยใช้ sequelize.define
-// โมเดลนี้จะมีฟิลด์ (fields) ต่าง ๆ ที่กำหนดไว้ในออบเจ็กต์ที่สอง
-
+import sequelize from "./db.js";
+import becrypt from "bcryptjs";
 const User = sequelize.define(
   "user",
   {
@@ -21,21 +16,20 @@ const User = sequelize.define(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         isEmail: true,
       },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-      },
     },
-
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     type: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    //teacher ต้องมี school + phone
+    // Teacher attribute
     school: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -44,7 +38,6 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-
     isVerified: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
@@ -55,30 +48,21 @@ const User = sequelize.define(
     hooks: {
       beforeCreate: async (user) => {
         if (user.password) {
-          const salt = await bcrypt.genSalt(10); // เพื่อที่จะ password ไม่ซ้ำกัน  ยิ่งใส่เลขเยอะยิ่งถอดรหัสยาก แต่ก็จะรอนาน
-          user.password = await bcrypt.hash(user.password, salt);
+          const salt = await becrypt.genSalt(10);
+          user.password = await becrypt.hash(user.password, salt);
         }
       },
       beforeUpdate: async (user) => {
         if (user.changed("password")) {
-          const salt = await bcrypt.genSalt(10); // เพื่อที่จะ password ไม่ซ้ำกัน  ยิ่งใส่เลขเยอะยิ่งถอดรหัสยาก แต่ก็จะรอนาน
-          user.password = await bcrypt.hash(user.password, salt);
+          const salt = await becrypt.genSalt(10);
+          user.password = await becrypt.hash(user.password, salt);
         }
       },
     },
   }
 );
 
-// User.sync({ force: false })
-//   .then(() => {
-//     console.log("Table created or already exists");
-//   })
-//   .catch((error) => {
-//     console.error("Error creating table", error);
-//   });
-
 User.prototype.comparePassword = async function (candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
+  return await becrypt.compare(candidatePassword, this.password);
 };
-
 export default User;

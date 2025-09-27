@@ -1,18 +1,23 @@
 import User from "./user.model.js";
-import { DataTypes } from "sequelize"; // <-- this is the missing piece
-
 
 const Admin = User.init(
+  {},
   {
-    department: { type: DataTypes.STRING, allowNull: false },
+
+    scopes: {
+      defaultScope: {
+        where: {
+          type: "admin",
+        },
+      },
+    },
   },
   {
-  
-    modelName: "Admin",
     hooks: {
-      beforeCreate: (admin) => { admin.type = "admin"; },
+      beforeCreate: (admin) => {
+        admin.type = "admin";
+      },
     },
   }
 );
-
 export default Admin;
