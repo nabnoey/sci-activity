@@ -10,10 +10,10 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   dialect: dbConfig.DIALECT,//ประเภทฐานข้อมูล เช่น mysql, postgres,
   logging: false,//ปิดการแสดงผล log คำสั่ง SQL ในคอนโซล เพื่อให้ไม่แสดงข้อมูลเยอะเกินไป
   dialectOptions: {
-    // ssl: {
-    //   require: true,
-    //   rejectUnauthorized: false,
-    // },
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
 
     ssl:false
   },
