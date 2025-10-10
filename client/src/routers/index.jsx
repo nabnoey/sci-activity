@@ -8,7 +8,8 @@ import Login from "../pages/Login";
 import NotFound from "../pages/NotFound";
 import Activities from "../pages/Activities";
 import AddActivity from "../pages/AddActivity";
-import News from "../pages/News";
+import UpdateActivity from "../pages/UpdateActivity";
+
 
 const router = createBrowserRouter([
   {
@@ -32,10 +33,8 @@ const router = createBrowserRouter([
         element: <Activities />,
       },
       { path: "add-activity", element: <AddActivity /> },
-      {
-        path: "news",
-        element: <News />,
-      },
+      { path: "activities/edit/:id", element: <UpdateActivity /> },
+     
     ],
   },
   {

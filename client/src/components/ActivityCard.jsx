@@ -1,10 +1,51 @@
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import ActivityService from '../services/activity.service'; 
+
 const ActivityCard = ({ activity }) => {
+  const navigate = useNavigate();
+
   const formatDate = (dateStr) =>
     new Date(dateStr).toLocaleDateString("th-TH", {
       year: "numeric",
       month: "long",
       day: "numeric",
     });
+
+  const handleUpdateClick = () => {
+    navigate(`/activities/edit/${activity.id}`);
+  };
+
+  const handleDeleteClick = async () => {
+    Swal.fire({
+      title: 'ยืนยันที่จะลบกิจกรรม?',
+      text: "กิจกรรมจะไม่สามารถกู้คืนกลับมาได้!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await ActivityService.deleteActivities(activity.id); 
+          Swal.fire(
+            'ลบกิจกรรมสำเร็จ!',
+            'กิจกรรมถูกลบแล้ว.',
+            'success'
+          );
+          navigate('/activities'); 
+        } catch (error) {
+          Swal.fire(
+            'Error!',
+            'Failed to delete activity.',
+            'error'
+          );
+          console.error('Error deleting activity:', error);
+        }
+      }
+    });
+  };
 
   return (
     <div className="bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-transform duration-300 hover:-translate-y-3 hover:shadow-3xl">
@@ -68,6 +109,22 @@ const ActivityCard = ({ activity }) => {
               {activity.contact_email}
             </a>
           </p>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex justify-end gap-2 mt-4">
+          <button
+            onClick={handleUpdateClick}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+          >
+            Update
+          </button>
+          <button
+            onClick={handleDeleteClick}
+            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+          >
+            Delete
+          </button>
         </div>
       </div>
     </div>
